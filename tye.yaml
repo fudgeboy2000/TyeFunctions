@@ -1,0 +1,18 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: tyefunctions
+extensions:
+- name: zipkin
+- name: seq
+  logPath: ./.logs
+services:
+- name: restapi
+  project: RestApi/RestApi.csproj
+- name: blazorserverapp
+  project: BlazorServerApp/BlazorServerApp.csproj
+- name: functionapp
+  azureFunction: FunctionApp/

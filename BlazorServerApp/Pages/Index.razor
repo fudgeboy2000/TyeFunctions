@@ -1,0 +1,35 @@
+﻿@page "/"
+
+@using Definitions
+@using System.Text
+@using System.Text.Json
+
+@inject IHttpClientFactory _clientFactory
+Welcome to your demo app.
+
+<input class="form-control" id="userFormDemoText" type="text" placeholder="Enter demo text" @bind="DemoText" />
+<button class="btn btn-danger" type="button" @onclick="() => SubmitAsync()">Submit</button>
+<input class="form-control" id="userFormResponse" type="text" @bind="ResponseText" />
+
+@code{
+
+    private string DemoText = "My demo text";
+    private string ResponseText;
+
+    private async void SubmitAsync()
+    {
+        ResponseText = "";
+
+        var client = _clientFactory.CreateClient("RestApi");
+
+        var demoData = new DataModel() { DemoData = DemoText };
+
+        var httpResponse = await client.PostAsync("/Demo", new StringContent(JsonSerializer.Serialize(demoData), Encoding.UTF8, "application/json"));
+        httpResponse.EnsureSuccessStatusCode();
+
+        ResponseText = await httpResponse.Content.ReadAsStringAsync();
+
+        this.StateHasChanged();
+    }
+
+}
